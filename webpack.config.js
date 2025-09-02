@@ -10,12 +10,27 @@ module.exports = {
   output: {
     filename: 'bundle.js',
     path: path.join(__dirname, '/dist'),
-    clean: true
+    clean: true,
+    publicPath: '/perf-basecamp/'
   },
   devServer: {
-    hot: true,
+    static: {
+      directory: path.join(__dirname, 'dist')
+    },
+    devMiddleware: {
+      publicPath: '/perf-basecamp/'
+    },
+    port: 3000,
     open: true,
-    historyApiFallback: true
+    hot: true,
+    historyApiFallback: {
+      index: '/perf-basecamp/index.html',
+      disableDotRule: true
+    },
+
+    client: {
+      overlay: true
+    }
   },
   devtool: 'source-map',
   plugins: [
@@ -27,11 +42,11 @@ module.exports = {
     }),
     new Dotenv(),
     new BundleAnalyzerPlugin({
-      analyzerMode: 'static', // 'server', 'static', 'disabled' 중 선택. static은 html 파일 생성
+      analyzerMode: 'static',
       openAnalyzer: false,
-      generateStatsFile: true, // json 통계 파일 생성
-      statsFilename: 'bundle-stats.json', // json 파일명 지정
-      reportFilename: 'bundle-report.html' // html 보고서 파일명 지정
+      generateStatsFile: true,
+      statsFilename: 'bundle-stats.json',
+      reportFilename: 'bundle-report.html'
     })
   ],
   module: {
