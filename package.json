@@ -15,8 +15,8 @@
     "deploy": "npm run build:prod && npx gh-pages -d dist"
   },
   "keywords": [],
-  "author": "woowacourse",
-  "homepage": "https://{username}.github.io/perf-basecamp",
+  "author": "wo-o29",
+  "homepage": "https://wo-o29.github.io/perf-basecamp",
   "license": "MIT",
   "dependencies": {
     "@giphy/js-fetch-api": "^4.1.1",
@@ -60,7 +60,7 @@
     "webpack": "^5.88.2",
     "webpack-bundle-analyzer": "^4.10.2",
     "webpack-cli": "^4.7.2",
-    "webpack-dev-server": "^3.11.2",
+    "webpack-dev-server": "^4.0.0",
     "webpack-merge": "^6.0.1"
   },
   "babel": {
