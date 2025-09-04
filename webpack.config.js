@@ -8,26 +8,18 @@ module.exports = {
   entry: './src/index.tsx',
   resolve: { extensions: ['.ts', '.tsx', '.js', '.jsx'] },
   output: {
-    filename: 'bundle.js',
+    filename: '[name].[contenthash].js',
     path: path.join(__dirname, '/dist'),
-    clean: true,
-    publicPath: '/perf-basecamp/'
+    clean: true
   },
   devServer: {
     static: {
       directory: path.join(__dirname, 'dist')
     },
-    devMiddleware: {
-      publicPath: '/perf-basecamp/'
-    },
     port: 3000,
     open: true,
     hot: true,
-    historyApiFallback: {
-      index: '/perf-basecamp/index.html',
-      disableDotRule: true
-    },
-
+    historyApiFallback: true,
     client: {
       overlay: true
     }
