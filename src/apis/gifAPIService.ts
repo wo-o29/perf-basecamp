@@ -3,6 +3,7 @@ import { IGif } from '@giphy/js-types';
 
 import { GifImageModel } from '../models/image/gifImage';
 import { apiClient, ApiError } from '../utils/apiClient';
+import { memoryCache } from '../App';
 
 const API_KEY = process.env.GIPHY_API_KEY;
 if (!API_KEY) {
@@ -37,6 +38,21 @@ const fetchGifs = async (url: URL): Promise<GifImageModel[]> => {
   }
 };
 
+const fetchGifsWithMemoryCache = async (url: URL, cacheName: string): Promise<GifImageModel[]> => {
+  try {
+    const gifs = await apiClient.fetchWithMemoryCache<GifsResult>(url, cacheName, memoryCache);
+
+    return convertResponseToModel(gifs.data);
+  } catch (error) {
+    if (error instanceof ApiError) {
+      console.error(`API Error: ${error.status} - ${error.message}`);
+    } else {
+      console.error('Unexpected error:', error);
+    }
+    throw error;
+  }
+};
+
 export const gifAPIService = {
   /**
    * treding gif 목록을 가져옵니다.
@@ -44,13 +60,15 @@ export const gifAPIService = {
    * @ref https://developers.giphy.com/docs/api/endpoint#!/gifs/trending
    */
   getTrending: async (): Promise<GifImageModel[]> => {
+    const cacheName = 'trending-gifs-cache';
+
     const url = apiClient.appendSearchParams(new URL(`${BASE_URL}/trending`), {
       api_key: API_KEY,
       limit: `${DEFAULT_FETCH_COUNT}`,
       rating: 'g'
     });
 
-    return fetchGifs(url);
+    return fetchGifsWithMemoryCache(url, cacheName);
   },
   /**
    * 검색어에 맞는 gif 목록을 가져옵니다.

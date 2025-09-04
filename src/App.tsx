@@ -2,11 +2,13 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import NavBar from './components/NavBar/NavBar';
 import Footer from './components/Footer/Footer';
 import { lazy, Suspense } from 'react';
+import { MemoryCache } from './utils/MemoryCache';
+import './App.css';
 
 const HomePage = lazy(() => import('./pages/Home/Home'));
 const SearchPage = lazy(() => import('./pages/Search/Search'));
 
-import './App.css';
+export const memoryCache = new MemoryCache();
 
 const App = () => {
   return (
