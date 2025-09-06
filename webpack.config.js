@@ -3,6 +3,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin');
+const PreloadPlugin = require('./PreloadPlugin');
 
 module.exports = {
   entry: './src/index.tsx',
@@ -10,7 +12,8 @@ module.exports = {
   output: {
     filename: '[name].[contenthash].js',
     path: path.join(__dirname, '/dist'),
-    clean: true
+    clean: true,
+    assetModuleFilename: './static/[name][contenthash][ext]'
   },
   devServer: {
     static: {
@@ -29,6 +32,19 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './index.html'
     }),
+    new PreloadPlugin([
+      {
+        startsWith: './static/',
+        keyword: 'hero',
+        as: 'image'
+      },
+      {
+        startsWith: './static/',
+        keyword: 'JosefinSans',
+        as: 'font',
+        crossorigin: 'anonymous'
+      }
+    ]),
     new CopyWebpackPlugin({
       patterns: [{ from: './public', to: './public' }]
     }),
@@ -55,15 +71,40 @@ module.exports = {
         use: ['style-loader', 'css-loader']
       },
       {
-        test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
-        loader: 'file-loader',
-        options: {
-          name: 'static/[name].[ext]'
-        }
+        test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif|webm|mp4)$/i,
+        type: 'asset/resource'
       }
     ]
   },
   optimization: {
-    minimize: false
+    minimize: true,
+    minimizer: [
+      '...',
+      new ImageMinimizerPlugin({
+        deleteOriginalAssets: false,
+        minimizer: {
+          implementation: ImageMinimizerPlugin.sharpMinify
+        },
+        generator: [
+          // 현재는 이미지 파일이 1개여서 크기 고정(여러 개라면 각각의 크기에 맞게 조정 필요)
+          {
+            preset: 'avif',
+            implementation: ImageMinimizerPlugin.sharpGenerate,
+            options: {
+              encodeOptions: { avif: { quality: 50 } },
+              resize: { enabled: true, width: 1920 }
+            }
+          },
+          {
+            preset: 'webp',
+            implementation: ImageMinimizerPlugin.sharpGenerate,
+            options: {
+              encodeOptions: { webp: { quality: 75 } },
+              resize: { enabled: true, width: 1920 }
+            }
+          }
+        ]
+      })
+    ]
   }
 };
