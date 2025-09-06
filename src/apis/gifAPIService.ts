@@ -18,7 +18,7 @@ const convertResponseToModel = (gifList: IGif[]): GifImageModel[] => {
     return {
       id,
       title: title ?? '',
-      imageUrl: images.original.url
+      imageUrl: images.original.webp
     };
   });
 };
@@ -26,6 +26,7 @@ const convertResponseToModel = (gifList: IGif[]): GifImageModel[] => {
 const fetchGifs = async (url: URL): Promise<GifImageModel[]> => {
   try {
     const gifs = await apiClient.fetch<GifsResult>(url);
+    console.log(gifs);
 
     return convertResponseToModel(gifs.data);
   } catch (error) {
