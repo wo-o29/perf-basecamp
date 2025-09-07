@@ -18,7 +18,9 @@ const App = () => {
         <Route
           path="/"
           element={
-            <Suspense fallback={<div>Home Page Loading...</div>}>
+            <Suspense
+              fallback={<div style={{ width: '100vw', height: '100vh' }}>Home Page Loading...</div>}
+            >
               <HomePage />
             </Suspense>
           }
@@ -26,7 +28,11 @@ const App = () => {
         <Route
           path="/search"
           element={
-            <Suspense fallback={<div>Search Page Loading...</div>}>
+            <Suspense
+              fallback={
+                <div style={{ width: '100vw', height: '100vh' }}>Search Page Loading...</div>
+              }
+            >
               <SearchPage />
             </Suspense>
           }
