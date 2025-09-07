@@ -4,7 +4,6 @@ const Dotenv = require('dotenv-webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin');
-const PreloadPlugin = require('./PreloadPlugin');
 
 module.exports = {
   entry: './src/index.tsx',
@@ -32,14 +31,6 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './index.html'
     }),
-    new PreloadPlugin([
-      {
-        startsWith: './static/',
-        keyword: 'JosefinSans',
-        as: 'font',
-        crossorigin: 'anonymous'
-      }
-    ]),
     new CopyWebpackPlugin({
       patterns: [{ from: './public', to: './public' }]
     }),
@@ -66,7 +57,7 @@ module.exports = {
         use: ['style-loader', 'css-loader']
       },
       {
-        test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif|webm|mp4)$/i,
+        test: /\.(eot|svg|png|jpg|gif|webm|mp4)$/i,
         type: 'asset/resource'
       }
     ]
