@@ -47,7 +47,7 @@ const SearchResult = ({ status, gifList, loadMore }: SearchResultProps) => {
   };
 
   return (
-    <section>
+    <section className={styles.searchResultSection}>
       <ResultTitle status={status} />
       {renderContent()}
     </section>
