@@ -2,8 +2,12 @@ import { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames/bind';
 
-import heroImageAvif from '../../assets/images/hero.png?as=avif';
-import heroImageWebp from '../../assets/images/hero.png?as=webp';
+import heroImageAvifPC from '../../assets/images/hero.png?as=avif-pc';
+import heroImageAvifTablet from '../../assets/images/hero.png?as=avif-tablet';
+import heroImageAvifMobile from '../../assets/images/hero.png?as=avif-mobile';
+import heroImageWebpPC from '../../assets/images/hero.png?as=webp-pc';
+import heroImageWebpTablet from '../../assets/images/hero.png?as=webp-tablet';
+import heroImageWebpMobile from '../../assets/images/hero.png?as=webp-mobile';
 import heroImagePng from '../../assets/images/hero.png';
 import trendingWebm from '../../assets/videos/trending.webm';
 import trendingMp4 from '../../assets/videos/trending.mp4';
@@ -17,6 +21,7 @@ import CustomCursor from './components/CustomCursor/CustomCursor';
 import AnimatedPath from './components/AnimatedPath/AnimatedPath';
 
 import styles from './Home.module.css';
+import ResponsivePicture from '../../components/ResponsivePicture/ResponsivePicture';
 
 const cx = classNames.bind(styles);
 
@@ -26,11 +31,18 @@ const Home = () => {
   return (
     <>
       <section className={styles.heroSection}>
-        <picture>
-          <source srcSet={heroImageAvif} type="image/avif" />
-          <source srcSet={heroImageWebp} type="image/webp" />
+        <ResponsivePicture
+          sources={[
+            { src: heroImageAvifPC, extension: 'avif', device: 'pc' },
+            { src: heroImageWebpPC, extension: 'webp', device: 'pc' },
+            { src: heroImageAvifTablet, extension: 'avif', device: 'tablet' },
+            { src: heroImageWebpTablet, extension: 'webp', device: 'tablet' },
+            { src: heroImageAvifMobile, extension: 'avif', device: 'mobile' },
+            { src: heroImageWebpMobile, extension: 'webp', device: 'mobile' }
+          ]}
+        >
           <img className={styles.heroImage} src={heroImagePng} alt="Hero image" />
-        </picture>
+        </ResponsivePicture>
         <div className={styles.projectTitle}>
           <h1 className={styles.title}>Memegle</h1>
           <h2 className={styles.subtitle}>gif search engine for you</h2>
