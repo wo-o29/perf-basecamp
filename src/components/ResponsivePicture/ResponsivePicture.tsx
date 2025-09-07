@@ -4,7 +4,7 @@ type Device = 'pc' | 'tablet' | 'mobile';
 
 type PictureSource = {
   src: string;
-  extension: string;
+  format: string;
   device: Device;
 };
 
@@ -21,8 +21,8 @@ const MEDIA_QUERIES = {
 function ResponsivePicture({ sources, children }: PropsWithChildren<ResponsivePictureProps>) {
   return (
     <picture>
-      {sources.map(({ src, extension, device }) => (
-        <source key={src} srcSet={src} type={`image/${extension}`} media={MEDIA_QUERIES[device]} />
+      {sources.map(({ src, format, device }) => (
+        <source key={src} srcSet={src} type={`image/${format}`} media={MEDIA_QUERIES[device]} />
       ))}
       {children}
     </picture>

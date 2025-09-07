@@ -33,12 +33,12 @@ const Home = () => {
       <section className={styles.heroSection}>
         <ResponsivePicture
           sources={[
-            { src: heroImageAvifPC, extension: 'avif', device: 'pc' },
-            { src: heroImageWebpPC, extension: 'webp', device: 'pc' },
-            { src: heroImageAvifTablet, extension: 'avif', device: 'tablet' },
-            { src: heroImageWebpTablet, extension: 'webp', device: 'tablet' },
-            { src: heroImageAvifMobile, extension: 'avif', device: 'mobile' },
-            { src: heroImageWebpMobile, extension: 'webp', device: 'mobile' }
+            { src: heroImageAvifPC, format: 'avif', device: 'pc' },
+            { src: heroImageWebpPC, format: 'webp', device: 'pc' },
+            { src: heroImageAvifTablet, format: 'avif', device: 'tablet' },
+            { src: heroImageWebpTablet, format: 'webp', device: 'tablet' },
+            { src: heroImageAvifMobile, format: 'avif', device: 'mobile' },
+            { src: heroImageWebpMobile, format: 'webp', device: 'mobile' }
           ]}
         >
           <img className={styles.heroImage} src={heroImagePng} alt="Hero image" />
