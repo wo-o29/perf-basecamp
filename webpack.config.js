@@ -35,11 +35,6 @@ module.exports = {
     new PreloadPlugin([
       {
         startsWith: './static/',
-        keyword: 'hero',
-        as: 'image'
-      },
-      {
-        startsWith: './static/',
         keyword: 'JosefinSans',
         as: 'font',
         crossorigin: 'anonymous'
@@ -86,9 +81,8 @@ module.exports = {
           implementation: ImageMinimizerPlugin.sharpMinify
         },
         generator: [
-          // 현재는 이미지 파일이 1개여서 크기 고정(여러 개라면 각각의 크기에 맞게 조정 필요)
           {
-            preset: 'avif',
+            preset: 'avif-pc',
             implementation: ImageMinimizerPlugin.sharpGenerate,
             options: {
               encodeOptions: { avif: { quality: 50 } },
@@ -96,11 +90,43 @@ module.exports = {
             }
           },
           {
-            preset: 'webp',
+            preset: 'avif-tablet',
+            implementation: ImageMinimizerPlugin.sharpGenerate,
+            options: {
+              encodeOptions: { avif: { quality: 50 } },
+              resize: { enabled: true, width: 1024 }
+            }
+          },
+          {
+            preset: 'avif-mobile',
+            implementation: ImageMinimizerPlugin.sharpGenerate,
+            options: {
+              encodeOptions: { avif: { quality: 50 } },
+              resize: { enabled: true, width: 768 }
+            }
+          },
+          {
+            preset: 'webp-pc',
             implementation: ImageMinimizerPlugin.sharpGenerate,
             options: {
               encodeOptions: { webp: { quality: 75 } },
               resize: { enabled: true, width: 1920 }
+            }
+          },
+          {
+            preset: 'webp-tablet',
+            implementation: ImageMinimizerPlugin.sharpGenerate,
+            options: {
+              encodeOptions: { webp: { quality: 75 } },
+              resize: { enabled: true, width: 1024 }
+            }
+          },
+          {
+            preset: 'webp-mobile',
+            implementation: ImageMinimizerPlugin.sharpGenerate,
+            options: {
+              encodeOptions: { webp: { quality: 75 } },
+              resize: { enabled: true, width: 768 }
             }
           }
         ]
