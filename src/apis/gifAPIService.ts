@@ -3,7 +3,6 @@ import { IGif } from '@giphy/js-types';
 
 import { GifImageModel } from '../models/image/gifImage';
 import { apiClient, ApiError } from '../utils/apiClient';
-import { memoryCache } from '../App';
 import { IWebP } from '@giphy/js-types/dist/images';
 
 const API_KEY = process.env.GIPHY_API_KEY;
@@ -47,9 +46,9 @@ const fetchGifs = async (url: URL): Promise<GifImageModel[]> => {
   }
 };
 
-const fetchGifsWithMemoryCache = async (url: URL, cacheName: string): Promise<GifImageModel[]> => {
+const fetchGifsWithCacheStorage = async (url: URL, cacheName: string): Promise<GifImageModel[]> => {
   try {
-    const gifs = await apiClient.fetchWithMemoryCache<GifsResult>(url, cacheName, memoryCache);
+    const gifs = await apiClient.fetchWithCacheStorage<GifsResult>(url, cacheName);
 
     return convertResponseToModel(gifs.data);
   } catch (error) {
@@ -77,7 +76,7 @@ export const gifAPIService = {
       rating: 'g'
     });
 
-    return fetchGifsWithMemoryCache(url, cacheName);
+    return fetchGifsWithCacheStorage(url, cacheName);
   },
   /**
    * 검색어에 맞는 gif 목록을 가져옵니다.

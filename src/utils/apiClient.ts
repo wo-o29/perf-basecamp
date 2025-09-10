@@ -1,11 +1,32 @@
-import type { MemoryCache } from './MemoryCache';
-
 export class ApiError extends Error {
   constructor(public status: number, message?: string) {
     super(message);
     this.name = 'ApiError';
   }
 }
+
+const getCacheData = async <T>(
+  cache: Cache,
+  key: string
+): Promise<{ data: T; expiryDate: number } | null> => {
+  const cachedResponse = await cache.match(key);
+  if (!cachedResponse) {
+    return null;
+  }
+
+  return cachedResponse.json();
+};
+
+const setCacheData = async <T>(cache: Cache, key: string, data: T, ttl: number): Promise<void> => {
+  const expiryDate = Date.now() + ttl;
+  const response = new Response(
+    JSON.stringify({
+      data,
+      expiryDate
+    })
+  );
+  await cache.put(key, response);
+};
 
 export const apiClient = {
   fetch: async <T>(url: URL): Promise<T> => {
@@ -16,14 +37,16 @@ export const apiClient = {
     return response.json();
   },
 
-  fetchWithMemoryCache: async <T>(
-    url: URL,
-    cacheName: string,
-    memoryCache: MemoryCache
-  ): Promise<T> => {
-    const cachedData = memoryCache.get<T>(cacheName);
-    if (cachedData) {
-      return Promise.resolve(cachedData);
+  fetchWithCacheStorage: async <T>(url: URL, cacheName: string): Promise<T> => {
+    const cache = await caches.open(cacheName);
+
+    const cached = await getCacheData<T>(cache, url.toString());
+    if (cached) {
+      if (cached.expiryDate > Date.now()) {
+        return cached.data;
+      }
+
+      await cache.delete(url.toString());
     }
 
     const response = await fetch(url.toString());
@@ -32,7 +55,8 @@ export const apiClient = {
     }
     const data = await response.json();
 
-    memoryCache.set(cacheName, data);
+    setCacheData(cache, url.toString(), data, 60 * 60 * 1000);
+
     return data;
   },
 
